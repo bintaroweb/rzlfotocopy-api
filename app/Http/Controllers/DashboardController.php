@@ -54,9 +54,9 @@ class DashboardController extends Controller
     public function stats(Request $request)
     {
         $data = [
-            'today' => Schedule::whereDate('date', Carbon::today())->count(),
+            'today' => Schedule::where('date', date('Y-m-d'))->count(),
             'technician' => Schedule::whereDate('date', Carbon::today())->distinct('technician_id')->count('technician_id'),
-            'tommorow' => Schedule::whereDate('date', Carbon::tomorrow())->count(),
+            'tommorow' => Schedule::where('date', date('Y-m-d', strtotime('+1 days')))->count(),
         ];
 
         return new DashboardResource($data);
