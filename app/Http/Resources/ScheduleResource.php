@@ -22,7 +22,7 @@ class ScheduleResource extends JsonResource
             'contact' => $this->contact,
             'address' => $this->address,
             'problem' => $this->problem,
-            'technician' => $this->technician->id ?? '',
+            'technician' => $this->technician->name ?? '',
 
         ];
     }

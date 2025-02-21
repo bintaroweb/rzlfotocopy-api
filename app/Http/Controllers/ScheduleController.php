@@ -8,6 +8,7 @@ use App\Http\Resources\ScheduleUpdateResource;
 use App\Models\Schedule;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 
 class ScheduleController extends Controller
 {
@@ -28,7 +29,7 @@ class ScheduleController extends Controller
         }
 
         return $query->paginate(
-            perPage: $request->input('limit', 25),
+            perPage: $request->input('limit', 30),
             page: $request->input('page', 1)
         );
     }
@@ -54,7 +55,7 @@ class ScheduleController extends Controller
         $schedule = new Schedule($data);
         $schedule->contact = $data['contact'];
         $schedule->customer_id = $data['customer'];
-        $schedule->technician_id = $data['technician'];
+        $schedule->technician_id = $data['technician'] ?? null;
         $schedule->created_by = $user->id;
         $schedule->save();
 
@@ -111,5 +112,38 @@ class ScheduleController extends Controller
         $date = $request['date'];
         $schedules = Schedule::where('date', $date)->with('customer', 'technician')->get();
         return ScheduleResource::collection($schedules);
+    }
+
+    public function empty(Request $request)
+    {
+        $schedules = Schedule::where('date', date('Y-m-d'))->where('technician_id', 0)->orWhere('technician_id', null)->get();
+        return ScheduleResource::collection($schedules);
+    }
+
+    public function assign(Request $request)
+    {
+        try {
+            $schedules = $request->all();
+
+            DB::beginTransaction();
+
+            foreach ($schedules as $schedule) {
+                $scheduleModel = Schedule::where('uuid', $schedule['uuid'])->firstOrFail();
+                $scheduleModel->technician_id = $schedule['technician'];
+                $scheduleModel->save();
+            }
+
+            DB::commit();
+
+            return response()->json([
+                "status" => true,
+                "message" => "Schedules updated successfully"
+            ])->setStatusCode(200);
+        } catch (\Exception $e) {
+            return response()->json([
+                "status" => false,
+                "message" => "Gagal menyimpan data: " . $e->getMessage()
+            ])->setStatusCode(500);
+        }
     }
 }

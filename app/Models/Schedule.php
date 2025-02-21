@@ -10,6 +10,7 @@ class Schedule extends Model
 {
     use SoftDeletes;
     protected $fillable = [
+        'id',
         'date',
         'customer_id',
         'technician_id',

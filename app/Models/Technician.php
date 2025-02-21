@@ -9,6 +9,7 @@ class Technician extends Model
     //
 
     protected $fillable = [
+        'id',
         'name',
         'contact',
     ];
