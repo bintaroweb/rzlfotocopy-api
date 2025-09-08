@@ -32,6 +32,8 @@ class CustomerRequest extends FormRequest
             'city' => 'required|integer|exists:cities,id',
             'note' => 'nullable|string',
             'status' => 'required|integer|exists:status,id',
+            'latitude' => 'nullable|numeric|between:-90,90',
+            'longitude' => 'nullable|numeric|between:-180,180',
         ];
     }
 

@@ -17,6 +17,8 @@ class Customer extends Model
         'address',
         'customer_city',
         'customer_status',
+        'latitude',
+        'longitude',
     ];
 
     public static function boot()
