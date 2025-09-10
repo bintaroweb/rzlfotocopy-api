@@ -16,7 +16,7 @@ class ScheduleController extends Controller
     private function getSchedules(Request $request, $user)
     {
         $query = Schedule::orderBy('created_at', 'desc')
-            ->with('customer', 'technician');
+            ->with('customer', 'technician', 'parentSchedule');
 
         if ($search = $request->input('search')) {
             // Gabungkan pencarian customer_name dan problem dalam satu query
