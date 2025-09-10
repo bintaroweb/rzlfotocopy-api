@@ -29,7 +29,8 @@ class ScheduleRequest extends FormRequest
             'address' => 'required|string',
             'contact' => 'required|string',
             'technician' => 'nullable|integer',
-            'problem' => 'required|string'
+            'problem' => 'required|string',
+            'parent_schedule_id' => 'nullable|integer|exists:schedules,id',
         ];
     }
 

@@ -38,4 +38,14 @@ class Schedule extends Model
     {
         return $this->belongsTo(Technician::class, 'technician_id', 'id');
     }
+
+    public function parentSchedule()
+    {
+        return $this->belongsTo(Schedule::class, 'parent_schedule_id');
+    }
+
+    public function followupSchedules()
+    {
+        return $this->hasMany(Schedule::class, 'parent_schedule_id');
+    }
 }

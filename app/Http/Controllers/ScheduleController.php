@@ -52,11 +52,13 @@ class ScheduleController extends Controller
         $data = $request->validated();
         $user = Auth::user();
 
+
         $schedule = new Schedule($data);
         $schedule->contact = $data['contact'];
         $schedule->customer_id = $data['customer'];
         $schedule->technician_id = $data['technician'] ?? null;
         $schedule->created_by = $user->id;
+        $schedule->parent_schedule_id = $data['parent_schedule_id'] ?? null;
         $schedule->save();
 
         return new ScheduleResource($schedule);
