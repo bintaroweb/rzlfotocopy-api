@@ -51,13 +51,7 @@ class ScheduleController extends Controller
     public function store(ScheduleRequest $request)
     {
         $data = $request->validated();
-        // Map schedule_id to parent_schedule_id if present
-        if (isset($data['schedule_id'])) {
-            $data['parent_schedule_id'] = $data['schedule_id'];
-            unset($data['schedule_id']);
-        }
         $user = Auth::user();
-
 
         $schedule = new Schedule($data);
         $schedule->contact = $data['contact'];
@@ -76,7 +70,7 @@ class ScheduleController extends Controller
     public function show(string $uuid)
     {
         $schedule = Schedule::where('uuid', $uuid)->firstOrFail();
-        return new ScheduleUpdateResource($schedule);
+        return new ScheduleResource($schedule);
     }
 
     public function history($id)
