@@ -31,6 +31,7 @@ class ScheduleRequest extends FormRequest
             'technician' => 'nullable|integer',
             'problem' => 'required|string',
             'parent_schedule_id' => 'nullable|integer|exists:schedules,id',
+            'schedule_id' => 'nullable|integer|exists:schedules,id',
         ];
     }
 

@@ -9,6 +9,7 @@ use App\Models\Schedule;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
 
 class ScheduleController extends Controller
 {
@@ -50,8 +51,15 @@ class ScheduleController extends Controller
     public function store(ScheduleRequest $request)
     {
         $data = $request->validated();
+        // Map schedule_id to parent_schedule_id if present
+        if (isset($data['schedule_id'])) {
+            $data['parent_schedule_id'] = $data['schedule_id'];
+            unset($data['schedule_id']);
+        }
         $user = Auth::user();
 
+        // Debug: log parent_schedule_id value
+        // dd($request);
 
         $schedule = new Schedule($data);
         $schedule->contact = $data['contact'];

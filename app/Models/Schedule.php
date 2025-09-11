@@ -17,6 +17,7 @@ class Schedule extends Model
         'contact',
         'address',
         'problem',
+        'parent_schedule_id',
         "created_by"
     ];
 
