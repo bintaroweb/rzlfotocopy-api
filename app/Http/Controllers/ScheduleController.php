@@ -73,6 +73,17 @@ class ScheduleController extends Controller
         return new ScheduleUpdateResource($schedule);
     }
 
+    public function history($id)
+    {
+        $schedules = Schedule::where('parent_schedule_id', $id)
+            ->orWhere('id', $id)
+            ->with('customer', 'technician', 'parentSchedule')
+            ->orderBy('date', 'asc')
+            ->get();
+
+        return ScheduleResource::collection($schedules);
+    }
+
     /**
      * Update the specified resource in storage.
      */

@@ -25,6 +25,7 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
     Route::get('customers/status', [CustomerController::class, 'status']);
     Route::get('technicians/list', [TechnicianController::class, 'list']);
     Route::get('schedules/print', [ScheduleController::class, 'print']);
+    Route::get('schedules/history/{id}', [ScheduleController::class, 'history']);
     Route::get('schedules/empty', [ScheduleController::class, 'empty']);
     Route::post('schedules/assign', [ScheduleController::class, 'assign']);
     Route::get('dashboard/stats', [DashboardController::class, 'stats']);
