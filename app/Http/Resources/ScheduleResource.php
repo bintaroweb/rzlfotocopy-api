@@ -17,7 +17,7 @@ class ScheduleResource extends JsonResource
         return [
             'id' => $this->id,
             'uuid' => $this->uuid,
-            'customer' => $this->customer->customer_name ?? '',
+            'customer' => $this->customer->id ?? '',
             'date' => $this->date,
             'contact' => $this->contact,
             'address' => $this->address,
