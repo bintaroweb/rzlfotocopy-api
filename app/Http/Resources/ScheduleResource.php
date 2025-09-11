@@ -27,6 +27,10 @@ class ScheduleResource extends JsonResource
             'parent_schedule' => $this->parentSchedule ? [
                 'id' => $this->parentSchedule->id,
                 'date' => $this->parentSchedule->date,
+                'customer' => $this->parentSchedule->customer->customer_name ?? '',
+                'contact' => $this->parentSchedule->contact,
+                'address' => $this->parentSchedule->address,
+                'technician' => $this->parentSchedule->technician->name ?? '',
                 'problem' => $this->parentSchedule->problem,
             ] : null,
         ];

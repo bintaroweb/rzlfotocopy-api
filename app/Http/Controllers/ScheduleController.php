@@ -58,8 +58,6 @@ class ScheduleController extends Controller
         }
         $user = Auth::user();
 
-        // Debug: log parent_schedule_id value
-        // dd($request);
 
         $schedule = new Schedule($data);
         $schedule->contact = $data['contact'];
