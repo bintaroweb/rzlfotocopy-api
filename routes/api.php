@@ -31,8 +31,9 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
     Route::get('dashboard/stats', [DashboardController::class, 'stats']);
     Route::get('worksheets/{date}', [WorksheetController::class, 'getWorksheets']);
 
-    //General routes
+    //Schedules
     Route::apiResource('schedules', ScheduleController::class);
+    //Customers
     Route::apiResource('customers', CustomerController::class);
     //Products
     Route::apiResource('products', ProductController::class);
