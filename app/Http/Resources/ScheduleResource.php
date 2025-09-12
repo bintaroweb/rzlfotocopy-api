@@ -17,12 +17,10 @@ class ScheduleResource extends JsonResource
         return [
             'id' => $this->id,
             'uuid' => $this->uuid,
-            'customer' => $this->customer->id ?? '',
+            'customer' => new CustomerResource($this->customer),
             'date' => $this->date,
-            'contact' => $this->contact,
-            'address' => $this->address,
             'problem' => $this->problem,
-            'technician' => $this->technician->name ?? '',
+            'technician' => new TechnicianResource($this->technician),
             'parent_schedule_id' => $this->parent_schedule_id,
             'parent_schedule' => $this->parentSchedule ? [
                 'id' => $this->parentSchedule->id,

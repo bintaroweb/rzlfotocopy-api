@@ -17,7 +17,7 @@ class ScheduleController extends Controller
     private function getSchedules(Request $request, $user)
     {
         $query = Schedule::orderBy('created_at', 'desc')
-            ->with('customer', 'technician', 'parentSchedule');
+            ->with(['customer', 'technician', 'parentSchedule.customer', 'parentSchedule.technician']);
 
         if ($search = $request->input('search')) {
             // Gabungkan pencarian customer_name dan problem dalam satu query
@@ -61,6 +61,9 @@ class ScheduleController extends Controller
         $schedule->parent_schedule_id = $data['parent_schedule_id'] ?? null;
         $schedule->save();
 
+        // Load relationships after save
+        $schedule->load(['customer', 'technician', 'parentSchedule.customer', 'parentSchedule.technician']);
+
         return new ScheduleResource($schedule);
     }
 
@@ -69,7 +72,9 @@ class ScheduleController extends Controller
      */
     public function show(string $uuid)
     {
-        $schedule = Schedule::where('uuid', $uuid)->firstOrFail();
+        $schedule = Schedule::where('uuid', $uuid)
+            ->with(['customer', 'technician', 'parentSchedule.customer', 'parentSchedule.technician'])
+            ->firstOrFail();
         return new ScheduleResource($schedule);
     }
 
@@ -77,7 +82,7 @@ class ScheduleController extends Controller
     {
         $schedules = Schedule::where('parent_schedule_id', $id)
             ->orWhere('id', $id)
-            ->with('customer', 'technician', 'parentSchedule')
+            ->with(['customer', 'technician', 'parentSchedule.customer', 'parentSchedule.technician'])
             ->orderBy('date', 'asc')
             ->get();
 
@@ -104,6 +109,9 @@ class ScheduleController extends Controller
         $customer->customer_phone = $data['contact'];
         $customer->save();
 
+        // Load relationships after save
+        $schedule->load(['customer', 'technician', 'parentSchedule.customer', 'parentSchedule.technician']);
+
         return new ScheduleUpdateResource($schedule);
     }
 
@@ -123,13 +131,20 @@ class ScheduleController extends Controller
     public function print(Request $request)
     {
         $date = $request['date'];
-        $schedules = Schedule::where('date', $date)->with('customer', 'technician')->get();
+        $schedules = Schedule::where('date', $date)
+            ->with(['customer', 'technician', 'parentSchedule.customer', 'parentSchedule.technician'])
+            ->get();
         return ScheduleResource::collection($schedules);
     }
 
     public function empty(Request $request)
     {
-        $schedules = Schedule::where('date', date('Y-m-d'))->where('technician_id', 0)->orWhere('technician_id', null)->get();
+        $schedules = Schedule::where('date', date('Y-m-d'))
+            ->where(function ($query) {
+                $query->where('technician_id', 0)->orWhere('technician_id', null);
+            })
+            ->with(['customer', 'technician', 'parentSchedule.customer', 'parentSchedule.technician'])
+            ->get();
         return ScheduleResource::collection($schedules);
     }
 
